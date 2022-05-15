@@ -15,12 +15,12 @@ class SingleTab extends StatefulWidget {
 }
 
 class _SingleTabState extends State<SingleTab> {
-  VlcPlayerController _controller;
+  late VlcPlayerController _controller;
   final _key = GlobalKey<VlcPlayerWithControlsState>();
 
   //
-  List<VideoData> listVideos;
-  int selectedVideoIndex;
+  late List<VideoData> listVideos;
+  late int selectedVideoIndex;
 
   Future<File> _loadVideoToFs() async {
     final videoData = await rootBundle.load('assets/sample.mp4');
@@ -34,37 +34,19 @@ class _SingleTabState extends State<SingleTab> {
   void fillVideos() {
     listVideos = <VideoData>[];
     //
-    listVideos.add(VideoData(
-      name: 'Network Video 1',
-      path:
-          'http://samples.mplayerhq.hu/MPEG-4/embedded_subs/1Video_2Audio_2SUBs_timed_text_streams_.mp4',
-      type: VideoType.network,
-    ));
+    // listVideos.add(VideoData(
+    //   name: 'Network Video 1',
+    //   path: 'http://192.168.3.230:8081/2.mp4',
+    //   type: VideoType.network,
+    // ));
     //
     listVideos.add(VideoData(
       name: 'Network Video 2',
-      path: 'https://media.w3.org/2010/05/sintel/trailer.mp4',
+      path: 'http://192.168.3.230:8081/21703460_da3-1-30080.mp4',
+      audioPath: "http://192.168.3.230:8081/21703460_da3-1-30280.mp4",
       type: VideoType.network,
     ));
     //
-    listVideos.add(VideoData(
-      name: 'HLS Streaming Video 1',
-      path:
-          'http://demo.unified-streaming.com/video/tears-of-steel/tears-of-steel.ism/.m3u8',
-      type: VideoType.network,
-    ));
-    //
-    listVideos.add(VideoData(
-      name: 'File Video 1',
-      path: 'System File Example',
-      type: VideoType.file,
-    ));
-    //
-    listVideos.add(VideoData(
-      name: 'Asset Video 1',
-      path: 'assets/sample.mp4',
-      type: VideoType.asset,
-    ));
   }
 
   @override
@@ -81,6 +63,7 @@ class _SingleTabState extends State<SingleTab> {
         _controller = VlcPlayerController.network(
           initVideo.path,
           hwAcc: HwAcc.full,
+          audioSource: initVideo.audioPath,
           options: VlcPlayerOptions(
             advanced: VlcAdvancedOptions([
               VlcAdvancedOptions.networkCaching(2000),
@@ -144,8 +127,7 @@ class _SingleTabState extends State<SingleTab> {
               });
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(
-                      'The recorded video file has been added to the end of list.'),
+                  content: Text('The recorded video file has been added to the end of list.'),
                 ),
               );
             },
@@ -178,23 +160,20 @@ class _SingleTabState extends State<SingleTab> {
               selectedTileColor: Colors.black54,
               leading: Icon(
                 iconData,
-                color:
-                    selectedVideoIndex == index ? Colors.white : Colors.black,
+                color: selectedVideoIndex == index ? Colors.white : Colors.black,
               ),
               title: Text(
-                video.name,
+                video.name ?? "",
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  color:
-                      selectedVideoIndex == index ? Colors.white : Colors.black,
+                  color: selectedVideoIndex == index ? Colors.white : Colors.black,
                 ),
               ),
               subtitle: Text(
                 video.path,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  color:
-                      selectedVideoIndex == index ? Colors.white : Colors.black,
+                  color: selectedVideoIndex == index ? Colors.white : Colors.black,
                 ),
               ),
               onTap: () async {

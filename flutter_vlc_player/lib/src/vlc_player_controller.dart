@@ -30,13 +30,13 @@ class VlcPlayerController extends ValueNotifier<VlcPlayerValue> {
   /// package and null otherwise.
   VlcPlayerController.asset(
     this.dataSource, {
+    this.audioSource,
     this.autoInitialize = true,
     this.package,
     this.hwAcc = HwAcc.auto,
     this.autoPlay = true,
     this.options,
-    @Deprecated('Please, use the addOnInitListener method instead.')
-        VoidCallback? onInit,
+    @Deprecated('Please, use the addOnInitListener method instead.') VoidCallback? onInit,
     @Deprecated('Please, use the addOnRendererEventListener method instead.')
         RendererCallback? onRendererHandler,
   })  : _dataSourceType = DataSourceType.asset,
@@ -51,12 +51,12 @@ class VlcPlayerController extends ValueNotifier<VlcPlayerValue> {
   /// null.
   VlcPlayerController.network(
     this.dataSource, {
+    this.audioSource,
     this.autoInitialize = true,
     this.hwAcc = HwAcc.auto,
     this.autoPlay = true,
     this.options,
-    @Deprecated('Please, use the addOnInitListener method instead.')
-        VoidCallback? onInit,
+    @Deprecated('Please, use the addOnInitListener method instead.') VoidCallback? onInit,
     @Deprecated('Please, use the addOnRendererEventListener method instead.')
         RendererCallback? onRendererHandler,
   })  : package = null,
@@ -71,12 +71,12 @@ class VlcPlayerController extends ValueNotifier<VlcPlayerValue> {
   /// `'file://${file.path}'`.
   VlcPlayerController.file(
     File file, {
+    this.audioSource,
     this.autoInitialize = true,
     this.hwAcc = HwAcc.auto,
     this.autoPlay = true,
     this.options,
-    @Deprecated('Please, use the addOnInitListener method instead.')
-        VoidCallback? onInit,
+    @Deprecated('Please, use the addOnInitListener method instead.') VoidCallback? onInit,
     @Deprecated('Please, use the addOnRendererEventListener method instead.')
         RendererCallback? onRendererHandler,
   })  : dataSource = 'file://${file.path}',
@@ -89,6 +89,7 @@ class VlcPlayerController extends ValueNotifier<VlcPlayerValue> {
   /// The URI to the video file. This will be in different formats depending on
   /// the [DataSourceType] of the original video.
   final String dataSource;
+  final String? audioSource;
 
   /// Set hardware acceleration for player. Default is Automatic.
   final HwAcc hwAcc;
@@ -169,8 +170,7 @@ class VlcPlayerController extends ValueNotifier<VlcPlayerValue> {
   /// Attempts to open the given [url] and load metadata about the video.
   Future<void> initialize() async {
     if (_isDisposed) {
-      throw Exception(
-          'initialize was called on a disposed VlcPlayerController');
+      throw Exception('initialize was called on a disposed VlcPlayerController');
     }
     if (value.isInitialized) {
       throw Exception('Already Initialized');
@@ -269,9 +269,7 @@ class VlcPlayerController extends ValueNotifier<VlcPlayerValue> {
             spuTracksCount: event.spuTracksCount,
             activeSpuTrack: event.activeSpuTrack,
             isPlaying: event.isPlaying,
-            playingState: (event.isPlaying ?? false)
-                ? PlayingState.playing
-                : value.playingState,
+            playingState: (event.isPlaying ?? false) ? PlayingState.playing : value.playingState,
             errorDescription: VlcPlayerValue.noError,
           );
           break;
@@ -310,9 +308,7 @@ class VlcPlayerController extends ValueNotifier<VlcPlayerValue> {
       }
     }
 
-    vlcPlayerPlatform
-        .mediaEventsFor(_viewId)
-        .listen(mediaEventListener, onError: errorListener);
+    vlcPlayerPlatform.mediaEventsFor(_viewId).listen(mediaEventListener, onError: errorListener);
 
     // listen for renderer devices events
     void rendererEventListener(VlcRendererEvent event) {
@@ -942,6 +938,7 @@ class VlcPlayerController extends ValueNotifier<VlcPlayerValue> {
     if (autoInitialize) {
       await initialize();
     }
+    if (audioSource != null) await addAudioFromNetwork(audioSource!, isSelected: true);
     _isReadyToInitialize = true;
   }
 }

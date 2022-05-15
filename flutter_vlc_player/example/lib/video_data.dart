@@ -6,13 +6,15 @@ enum VideoType {
 }
 
 class VideoData {
-  final String name;
+  final String? name;
   final String path;
+  final String? audioPath;
   final VideoType type;
 
   VideoData({
     this.name,
-    this.path,
-    this.type,
+    required this.path,
+    this.audioPath,
+    required this.type,
   });
 }
