@@ -1,0 +1,41 @@
+targets:
+  $default:
+    builders:
+      source_gen|combining_builder:
+        options:
+          build_extensions:
+            '^lib/src/{{}}.dart': 'lib/generated/{{}}.g.dart'
+      freezed:
+        enabled: true
+        generate_for:
+          # exclude:
+          #   - test
+          #   - example
+          include:
+            - "lib/src/events/**.dart"
+        options:
+          build_extensions:
+            # https://github.com/dart-lang/build/blob/master/docs/writing_a_builder.md
+            '^lib/src/{{}}.dart': 'lib/generated/{{}}.freezed.dart'
+          # union_key: type
+          # union_value_case: pascal
+          # Disable the generation of copyWith/== for the entire project
+          # copy_with: true
+          # equal: true
+      # json_serializable:
+      #   options:
+      #     # Options configure how source code is generated for every
+      #     # `@JsonSerializable`-annotated class in the package.
+      #     #
+      #     # The default value for each is listed.
+      #     any_map: false
+      #     checked: false
+      #     constructor: ""
+      #     create_factory: true
+      #     create_to_json: true
+      #     disallow_unrecognized_keys: false
+      #     explicit_to_json: false
+      #     field_rename: none
+      #     generic_argument_factories: false
+      #     ignore_unannotated: false
+      #     include_if_null: true

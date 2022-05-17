@@ -351,8 +351,7 @@ class MethodChannelVlcPlayer extends VlcPlayerPlatform {
 
   @override
   Future<int?> getAudioTracksCount(int viewId) async {
-    var response =
-        await _api.getAudioTracksCount(ViewMessage()..viewId = viewId);
+    var response = await _api.getAudioTracksCount(ViewMessage()..viewId = viewId);
     return response.count;
   }
 
@@ -405,8 +404,7 @@ class MethodChannelVlcPlayer extends VlcPlayerPlatform {
 
   @override
   Future<int?> getVideoTracksCount(int viewId) async {
-    var response =
-        await _api.getVideoTracksCount(ViewMessage()..viewId = viewId);
+    var response = await _api.getVideoTracksCount(ViewMessage()..viewId = viewId);
     return response.count;
   }
 
@@ -451,8 +449,7 @@ class MethodChannelVlcPlayer extends VlcPlayerPlatform {
 
   @override
   Future<String?> getVideoAspectRatio(int viewId) async {
-    var response =
-        await _api.getVideoAspectRatio(ViewMessage()..viewId = viewId);
+    var response = await _api.getVideoAspectRatio(ViewMessage()..viewId = viewId);
     return response.aspectRatio;
   }
 
@@ -469,14 +466,12 @@ class MethodChannelVlcPlayer extends VlcPlayerPlatform {
 
   @override
   Future<List<String>> getAvailableRendererServices(int viewId) async {
-    var response =
-        await _api.getAvailableRendererServices(ViewMessage()..viewId = viewId);
+    var response = await _api.getAvailableRendererServices(ViewMessage()..viewId = viewId);
     return response.services!.cast<String>();
   }
 
   @override
-  Future<void> startRendererScanning(int viewId,
-      {String? rendererService}) async {
+  Future<void> startRendererScanning(int viewId, {String? rendererService}) async {
     return await _api.startRendererScanning(RendererScanningMessage()
       ..viewId = viewId
       ..rendererService = rendererService ?? '');
@@ -489,8 +484,7 @@ class MethodChannelVlcPlayer extends VlcPlayerPlatform {
 
   @override
   Future<Map<String, String>> getRendererDevices(int viewId) async {
-    var response =
-        await _api.getRendererDevices(ViewMessage()..viewId = viewId);
+    var response = await _api.getRendererDevices(ViewMessage()..viewId = viewId);
     return response.rendererDevices!.cast<String, String>();
   }
 
